@@ -12,10 +12,11 @@ keywords = ["serial", "CAN", "parser"]
 categories = ["embedded", "no-std"]
 
 [dependencies]
-embedded-hal = { version = "0.2.7", features = ["unproven"] }
+embedded-hal = { version = "1.0.0" }
 machine = "0.3.0"
 log = "0.4.21"
 defmt = { version = "0.3", optional = true }
+embedded-can = "0.4.1"
 
 [dev-dependencies]
 test-log = "0.2.11"

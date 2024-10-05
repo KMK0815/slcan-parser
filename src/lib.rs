@@ -62,7 +62,7 @@ use defmt::Format;
 
 use crate::parser::FrameParser;
 use core::convert::TryFrom;
-use embedded_hal::can::{Error, ErrorKind, Frame, Id, StandardId};
+use embedded_can::{Error, ErrorKind, Frame, Id, StandardId};
 
 /// Errors that can be encountered in this crate
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -373,7 +373,7 @@ impl FrameByteStreamHandler {
 mod tests {
     use super::*;
     use core::fmt::Write;
-    use embedded_hal::can::ExtendedId;
+    use embedded_can::ExtendedId;
     use heapless::String;
     use log::*;
     use test_log::test;

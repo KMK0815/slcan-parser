@@ -6,7 +6,7 @@ use crate::CanserialFrame;
 use crate::FrameDataLen;
 use crate::SlcanError;
 use crate::SlcanId;
-use embedded_hal::can;
+use embedded_can as can;
 use log::*;
 
 /// function to convert a hex char byte to it's binary value
@@ -353,7 +353,7 @@ impl FrameParser {
                 can::Id::Extended(eid) => eid.as_raw(),
             };
             let converted = from_hex(byte)? as u32;
-            let new_id = match embedded_hal::can::ExtendedId::new((raw_id << 4) + converted) {
+            let new_id = match can::ExtendedId::new((raw_id << 4) + converted) {
                 Some(x) => x,
                 None => return Err(SlcanError::StandardIdOverflow),
             };
