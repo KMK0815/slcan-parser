@@ -316,6 +316,12 @@ pub struct FrameByteStreamHandler {
     frame_buffer: CanserialFrame,
 }
 
+impl Default for FrameByteStreamHandler {
+    fn default() -> Self {
+        FrameByteStreamHandler::new()
+    }
+}
+
 impl FrameByteStreamHandler {
     /// Create a new handler
     pub fn new() -> Self {
@@ -400,7 +406,7 @@ mod tests {
             CanserialFrame::new_frame(id, &[0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8]).unwrap();
         assert_eq!(frame.id.0, Id::Standard(StandardId::new(0x1).unwrap()));
         assert_eq!(frame.dlc, FrameDataLen::new(8).unwrap());
-        assert_eq!(frame.rtr, false);
+        assert!(!frame.rtr);
         assert_eq!(frame.data, [0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8]);
         let mut buffer: String<32> = String::new();
         write!(&mut buffer, "{}", frame).unwrap();
@@ -410,7 +416,7 @@ mod tests {
         let frame = CanserialFrame::new_remote_frame(id, 4).unwrap();
         assert_eq!(frame.id.0, Id::Standard(StandardId::new(0x1).unwrap()));
         assert_eq!(frame.dlc, FrameDataLen::new(4).unwrap());
-        assert_eq!(frame.rtr, true);
+        assert!(frame.rtr);
         let mut buffer: String<32> = String::new();
         write!(&mut buffer, "{}", frame).unwrap();
         assert_eq!(buffer, "r0014");
@@ -433,7 +439,7 @@ mod tests {
         }
         assert_eq!(frame.id.0, Id::Standard(StandardId::new(0x1).unwrap()));
         assert_eq!(frame.dlc, FrameDataLen::new(8).unwrap());
-        assert_eq!(frame.rtr, false);
+        assert!(!frame.rtr);
         assert_eq!(frame.data, [0xde, 0xad, 0xbe, 0xef, 0xde, 0xad, 0xbe, 0xef]);
         info!("frame: {}", frame);
     }
@@ -455,7 +461,7 @@ mod tests {
         }
         assert_eq!(frame.id.0, Id::Standard(StandardId::new(0x1).unwrap()));
         assert_eq!(frame.dlc, FrameDataLen::new(4).unwrap());
-        assert_eq!(frame.rtr, true);
+        assert!(frame.rtr);
         info!("frame: {}", frame);
     }
 
@@ -476,7 +482,7 @@ mod tests {
         }
         assert_eq!(frame.id.0, Id::Extended(ExtendedId::new(0x1).unwrap()));
         assert_eq!(frame.dlc, FrameDataLen::new(4).unwrap());
-        assert_eq!(frame.rtr, false);
+        assert!(!frame.rtr);
         assert_eq!(frame.data[..4], [0xde, 0xad, 0xbe, 0xef]);
         info!("frame: {}", frame);
     }
@@ -498,7 +504,7 @@ mod tests {
         }
         assert_eq!(frame.id.0, Id::Extended(ExtendedId::new(0x1).unwrap()));
         assert_eq!(frame.dlc, FrameDataLen::new(4).unwrap());
-        assert_eq!(frame.rtr, true);
+        assert!(frame.rtr);
         info!("frame: {}", frame);
     }
 
@@ -519,7 +525,7 @@ mod tests {
         }
         assert_eq!(frame.id.0, Id::Standard(StandardId::new(0x27).unwrap()));
         assert_eq!(frame.dlc, FrameDataLen::new(0).unwrap());
-        assert_eq!(frame.rtr, false);
+        assert!(!frame.rtr);
         assert_eq!(frame.data, [0, 0, 0, 0, 0, 0, 0, 0]);
         info!("frame: {}", frame);
     }
@@ -562,7 +568,7 @@ mod tests {
         }
         assert_eq!(frame.id.0, Id::Standard(StandardId::new(0x1).unwrap()));
         assert_eq!(frame.dlc, FrameDataLen::new(4).unwrap());
-        assert_eq!(frame.rtr, false);
+        assert!(!frame.rtr);
         assert_eq!(frame.data[..4], [0xde, 0xad, 0xbe, 0xef]);
         info!("frame: {}", frame);
     }
@@ -758,7 +764,7 @@ mod tests {
             if let SlcanIncoming::Frame(frame) = incoming {
                 assert_eq!(frame.id.0, Id::Standard(StandardId::new(0x27).unwrap()));
                 assert_eq!(frame.dlc, FrameDataLen::new(0).unwrap());
-                assert_eq!(frame.rtr, false);
+                assert!(!frame.rtr);
                 assert_eq!(frame.data, [0, 0, 0, 0, 0, 0, 0, 0]);
             }
             debug!("{:?}", incoming);
@@ -774,7 +780,7 @@ mod tests {
             if let SlcanIncoming::Frame(frame) = incoming {
                 assert_eq!(frame.id.0, Id::Standard(StandardId::new(0x27).unwrap()));
                 assert_eq!(frame.dlc, FrameDataLen::new(0).unwrap());
-                assert_eq!(frame.rtr, false);
+                assert!(!frame.rtr);
                 assert_eq!(frame.data, [0, 0, 0, 0, 0, 0, 0, 0]);
             }
             if let SlcanIncoming::Speed(s) = incoming {
